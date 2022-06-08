@@ -30,16 +30,25 @@ gt_to_num <- function(string) {
 table %>%
   dplyr::rowwise() %>%
   dplyr::mutate(across(gt.col:ncol(table), gt_to_num))
-print(table)
+
+table1 <- table %>%
+  if(carrier[row,col] > 1){
+    carrier[row, col] = 1
+  }
+  
 
   Allele <- table %>% 
     dplyr::group_by(gene.col) %>%
     dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
   
-  carrier <- Allele
+  carrier <- Allele %>%
   if(carrier[row,col] > 1){
     carrier[row, col] = 1
   }
+  
+  snps <- table1 %>%
+    dplyr::group_by(gene.col) %>%
+    dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
   
   if (flag == "Allele") {
     return(Allele)
@@ -52,55 +61,6 @@ print(table)
   }
 }
 ```
-```{r}
-dt <- tibble(gene=c("g1","g2","g3","g4"),
-             s1=c(1,1,0,0),
-             s2=s1,
-             s3=c(1,1,1,1),
-             s4=s3)
-gs <- c("g2","g3")
 
-Task2 <- library(tidyverse)
-library(dplyr)
-
-count_gene_set_variant_refined <- function(Table, GeneSet, Name) {
-  
-  Set <- read_lines(GeneSet)
-  
- 
-  variant.per.gene_set.per.sample<- Table %>%
-    filter(gene %in% Set) %>%
-    summarise(across(2:ncol(Table),sum)) %>%
-    pivot_longer( everything(), names_to = "sampleID", values_to = Name)
-
-  return(variant.per.gene_set.per.sample)
-}
-```
-
-
-```{r}
-library(tidyverse)
-
-input <- tibble(CHROM=1, 
-                POS=2:7, 
-                ID = ".", 
-                GENE=c("g1", "g1", "g2", "g3", "g4","g4"), 
-                s1=c("0/1", "1/0", rep("0/0", 4)),
-                s2=c("1/0", "0/0", "1/0", "0/0", "0/1", "./."),
-                s3=c("0/0", "1/1", "0/0","0/0", "./.", "./."),
-                s4=c(rep("0/0", 3), "0/1", "1/1", "0/1"))
-
-
-gt2count <- function(genotype){
-  str_extract_all(genotype, "\\d") %>%
-    map_int(~sum(as.integer(.)))
-}
-
-input %>%
-  select(5:8) %>%
-  map_df(gt2count )
-  
-
-```
   
   
