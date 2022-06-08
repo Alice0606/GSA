@@ -1,0 +1,54 @@
+---
+title: "Task 3"
+author: "Alice"
+date: "2022/3/19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+Task3 <- function(ped, disease, geneset, covariates){
+  data <- select(ped, disease, geneset, covariates) %>%
+    as.tibble()
+
+  mod_fun <- function(df){
+    glm(disease~., data = df, family = "binomial")
+  }
+  
+  b_fun <- function(mod){
+    tidy(mod) %>%
+      filter(term == "count")
+  }
+  
+  df <- data %>%
+   pivot_longer(col = geneset, names_to = "category", values_to = "count") %>%
+   group_by(category) %>%
+   nest()%>%
+   mutate(model = map(data, mod_fun)) %>%
+    transmute(category,
+              beta = map(model, b_fun)) %>%
+    unnest() %>%
+    select(-term) %>%
+    ungroup()
+  summary(glm.fit)
+
+  output <- broom::tidy(glm.fit, conf.int = T)%>%
+    mutate(or = exp(estimate), pv = p.value, conf.low = conf.low, conf.high = conf.high)
+}
+```
+
+```{r}
+library(tidyverse)
+counts <- c(18,17,15,20,10,20,25,13,12)
+outcome <- gl(3,1,9)
+treatment <- gl(3,3)
+dt <- data.frame(treatment, outcome, counts) # showing data
+cova <- "treatment"
+f <- paste0("counts ~ outcome +", cova)
+mod1 <- glm(as.formula(f), data = dt, family = poisson())
+broom::tidy(mod1)
+summary(mod1)
+```
