@@ -6,32 +6,16 @@ output: html_document
 ---
 
 ```{r}
-check <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
-```
-
-```{r}
-library(magrittr)
-library(stringr)
-table <- tibble::tibble(CHROM=1, 
-                POS=2:7, 
-                ID = ".", 
-                gene.col=c("g1", "g1", "g2", "g3", "g4","g4"), 
-                gt.col=c("0/1", "1/0", rep("0/0", 4)),
-                s2=c("1/0", "0/0", "1/0", "0/0", "0/1", "./."),
-                s3=c("0/0", "1/1", "0/0","0/0", "./.", "./."),
-                s4=c(rep("0/0", 3), "0/1", "1/1", "0/1"))
- 
-
-
-gt_to_num <- function(string) {
+Task1 <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
+  
+  gt_to_num <- function(string) {
   sum(as.numeric(str_extract_all(string, "\\d")[[1]]))
 }
-
-table %>%
+  table %>%
   dplyr::rowwise() %>%
   dplyr::mutate(across(gt.col:ncol(table), gt_to_num))
 
-table1 <- table %>%
+  table1 <- table %>%
   if(carrier[row,col] > 1){
     carrier[row, col] = 1
   }

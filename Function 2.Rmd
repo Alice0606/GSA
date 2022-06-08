@@ -5,14 +5,10 @@ date: "2022/5/4"
 output: html_document
 ---
 ```{r}
-Task2 <- library(tidyverse)
-library(dplyr)
-
-count_gene_set_variant_refined <- function(Table, GeneSet, Name) {
+Task2 <- function(Table, GeneSet, Name) {
   
   Set <- read_lines(GeneSet)
   
-
   variant.per.gene_set.per.sample<- Table %>%
     filter(gene %in% Set) %>%
     summarise(across(2:ncol(Table),sum)) %>%

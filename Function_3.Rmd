@@ -37,18 +37,9 @@ Task3 <- function(ped, disease, geneset, covariates){
 
   output <- broom::tidy(glm.fit, conf.int = T)%>%
     mutate(or = exp(estimate), pv = p.value, conf.low = conf.low, conf.high = conf.high)
+  
+  print(output)
 }
 ```
 
-```{r}
-library(tidyverse)
-counts <- c(18,17,15,20,10,20,25,13,12)
-outcome <- gl(3,1,9)
-treatment <- gl(3,3)
-dt <- data.frame(treatment, outcome, counts) # showing data
-cova <- "treatment"
-f <- paste0("counts ~ outcome +", cova)
-mod1 <- glm(as.formula(f), data = dt, family = poisson())
-broom::tidy(mod1)
-summary(mod1)
-```
+
