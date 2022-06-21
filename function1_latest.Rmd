@@ -1,0 +1,50 @@
+---
+title: "Function"
+author: "Alice"
+date: "2022/2/12"
+output: html_document
+---
+
+```{r}
+Task1 <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
+  
+  gt_to_num <- function(string) {
+  sum(as.numeric(str_extract_all(string, "\\d")[[1]]))
+  }
+  
+  table %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(across(gt.col:ncol(table), gt_to_num))
+
+  table1 <- table %>%
+  for(j in gt.col:ncol(table)){ 
+    set(table, i= which(dt[[j]]!=0), j=j, value =1) 
+}
+
+  Allele <- table %>% 
+    dplyr::group_by(gene.col) %>%
+    dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
+  
+  carrier <- Allele %>%
+  if(carrier[row,col] > 1){
+    carrier[row, col] = 1
+  }
+  
+  snps <- table1 %>%
+    dplyr::group_by(gene.col) %>%
+    dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
+  
+  if (flag == "Allele") {
+    return(Allele)
+  }
+  if (flag == "snps") {
+    return(snps)
+  } 
+  if(flag == "carrier"){
+    return(carrier)
+  }
+}
+```
+
+  
+  

@@ -1,0 +1,47 @@
+---
+title: "function2"
+author: "Alice"
+date: "2022/5/4"
+output: html_document
+---
+```{r}
+Task2 <- function(Table, GeneSet, Name) {
+  
+  variant.per.gene_set.per.sample <- Table %>%
+    filter(gene %in% Set) %>%
+    summarise(across(2:ncol(Table),sum)) %>%
+    pivot_longer( everything(), names_to = "sampleID", values_to = Name)
+
+  return(variant.per.gene_set.per.sample)
+}
+```
+
+
+```{r}
+library(tidyverse)
+
+input <- tibble(CHROM=1, 
+                POS=2:7, 
+                ID = ".", 
+                GENE=c("g1", "g1", "g2", "g3", "g4","g4"), 
+                s1=c("0/1", "1/0", rep("0/0", 4)),
+                s2=c("1/0", "0/0", "1/0", "0/0", "0/1", "./."),
+                s3=c("0/0", "1/1", "0/0","0/0", "./.", "./."),
+                s4=c(rep("0/0", 3), "0/1", "1/1", "0/1"))
+
+
+gt2count <- function(genotype){
+  str_extract_all(genotype, "\\d") %>%
+    map_int(~sum(as.integer(.)))
+}
+
+input %>%
+  select(5:8) %>%
+  map_df(gt2count )
+  
+
+```
+  
+  
+```
+
