@@ -6,11 +6,13 @@ output: html_document
 ---
 
 ```{r}
-rearrange_table_according_to_allele <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
-  
-  gt_to_num <- function(string) {
+
+gt_to_num <- function(string) {
   sum(as.numeric(str_extract_all(string, "\\d")[[1]]))
-  }
+  } 
+
+rearrange_table_according_to_allele <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
+
   
   table %>%
   dplyr::rowwise() %>%
