@@ -31,7 +31,7 @@ count_mutations <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps",
 
   Allele <- table %>%
     dplyr::group_by(gene.col) %>%
-    dplyr::summarise(across((gt.col-1):(ncol(table)-1),base::sum))
+    dplyr::summarise(dplyr::across((gt.col-1):(ncol(table)-1),sum))
 
   carrier <- Allele %>%
     if(carrier[row,col] > 1){

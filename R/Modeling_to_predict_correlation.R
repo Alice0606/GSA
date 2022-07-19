@@ -20,7 +20,7 @@ mod_fun <- function(df){
 #' @examples
 Modeling_to_predict_correlation <- function(ped, disease, geneset, covariates){
   data <- dpylr::select(ped, disease, geneset, covariates) %>%
-    as_tibble()
+    dplyr::as_tibble()
 
   df <- data %>%
     tidyr::pivot_longer(col = geneset, names_to = "category", values_to = "count") %>%
