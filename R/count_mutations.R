@@ -17,12 +17,12 @@ gt_to_num <- function(string) {
 #' @param flag: one of the three forms of output: "Alleles", "Snps", "Carrier"
 #' @return the table returned has rows named by different genes and columes named by sample names. The genetype will be counted accoring to the different methods chosen by the user, all in the form of a number(e.g. 1 or 0)
 #' @examples
-rearrange_table_according_to_allele <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
+count_mutations <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
 
 
   table %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(across(gt.col:ncol(table), gt_to_num))
+    dplyr::mutate(dplyr::across(gt.col:ncol(table), gt_to_num))
 
   table1 <- table %>%
     for(j in gt.col:ncol(table)){
@@ -31,7 +31,7 @@ rearrange_table_according_to_allele <- function(table, gene.col, gt.col, flag = 
 
   Allele <- table %>%
     dplyr::group_by(gene.col) %>%
-    dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
+    dplyr::summarise(across((gt.col-1):(ncol(table)-1),base::sum))
 
   carrier <- Allele %>%
     if(carrier[row,col] > 1){
@@ -40,7 +40,7 @@ rearrange_table_according_to_allele <- function(table, gene.col, gt.col, flag = 
 
   snps <- table1 %>%
     dplyr::group_by(gene.col) %>%
-    dplyr::summarise(across((gt.col-1):(ncol(table)-1),sum))
+    dplyr::summarise(dplyr::across((gt.col-1):(ncol(table)-1),base::sum))
 
   if (flag == "Allele") {
     return(Allele)

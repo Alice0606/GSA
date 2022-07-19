@@ -16,7 +16,7 @@ Count_variant <- function(Table, GeneSet, Name) {
   variant.per.gene_set.per.sample <- Table %>%
     dplyr::filter(gene %in% GeneSet) %>%
     dplyr::summarise(dplyr::across(2:ncol(Table),sum)) %>%
-    tidyr::pivot_longer(everything(), names_to = "sampleID", values_to = Name)
+    tidyr::pivot_longer(select::everything(), names_to = "sampleID", values_to = Name)
 
   return(variant.per.gene_set.per.sample)
 }
