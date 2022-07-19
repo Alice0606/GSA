@@ -5,6 +5,16 @@ date: "2022/5/4"
 output: html_document
 ---
 ```{r}
+#' Title
+#'
+#' @param Table 
+#' @param GeneSet 
+#' @param Name 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 Count_variant <- function(Table, GeneSet, Name) {
   
   if(is.tibble(Table) == FALSE){
