@@ -1,5 +1,5 @@
-#' count genotype of specified genes
-#' the function is used to count the genotype of specified genes inputed by the user. A reference of which geneset has a higher impact on the disease.
+#'@title count genotype of specified genes
+#'@description the function is used to count the genotype of specified genes inputed by the user. A reference of which geneset has a higher impact on the disease.
 #' @param Table  a dataframe contains a colume of gene names and columes of population genetype which have been processed into numeric form.
 #' @param GeneSet  The name of gene(can be more than one) you are interested in.
 #' @param Name  the name of geneset you come up with.

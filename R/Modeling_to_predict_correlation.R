@@ -7,9 +7,9 @@ mod_fun <- function(df){
   stats::glm(disease~., data = df, family = "binomial")
 }
 
-#' Use modeling to calculate correlation
+#'@title Use modeling to calculate correlation
 #'
-#' With covariants and genesets, this function would calculate the necessary values that uncovers the correlation between genesets and diseases.
+#'@description With covariants and genesets, this function would calculate the necessary values that uncovers the correlation between genesets and diseases.
 #' @param ped A raw dataframe from the bioinformation database.
 #' @param disease The type of disease to be tested.
 #' @param geneset The genesets(can be more than one)that users want to test the correlation with the disease.
