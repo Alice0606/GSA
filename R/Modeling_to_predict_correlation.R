@@ -1,11 +1,19 @@
+#'@title tidy and extract needed data from glm
+#'@description This function serves to clear up the total output of glm in a tidier form for further data analysis. Then, a row named "count" can be extracted out.
+#'@param mod The output dataframe of mode function
 b_fun <- function(mod){
   broom::tidy(mod) %>%
     dylyr::filter(term == "count")
 }
 
+
+#'@title model for glm
+#'@description This function helps users to use the generalized linear models for predicting the correlation.
+
 mod_fun <- function(df){
   stats::glm(disease~., data = df, family = "binomial")
 }
+
 
 #'@title Use modeling to calculate correlation
 #'
