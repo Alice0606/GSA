@@ -9,7 +9,7 @@
 #' @examples
 Count_variant <- function(Table, GeneSet, Name) {
 
-  if(is_tibble(Table) == FALSE){
+  if(tibble::is_tibble(Table) == FALSE){
     stop("Table needs to be a tibble")
   }
 

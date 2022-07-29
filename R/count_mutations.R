@@ -4,7 +4,7 @@
 #'
 #' @param string The input genotype given by the user.
 gt_to_num <- function(string) {
-  base::sum(as.numeric(str_extract_all(string, "\\d")[[1]]))
+  sum(as.numeric(stringr::str_extract_all(string, "\\d")[[1]]))
 }
 #'  process table according to different counting alleles methods
 #'the function is used to process a given data table with a colume of gene names and columes of population genotype. Note that three forms of output can be chosen by inputing one of the flags below:
@@ -42,13 +42,13 @@ count_mutations <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps",
     dplyr::group_by(gene.col) %>%
     dplyr::summarise(dplyr::across((gt.col-1):(ncol(table)-1),base::sum))
 
-  if (flag == "Allele") {
+    base::if (flag == "Allele") {
     return(Allele)
   }
-  if (flag == "snps") {
+    base::if (flag == "snps") {
     return(snps)
   }
-  if(flag == "carrier"){
+    base::if(flag == "carrier"){
     return(carrier)
   }
 }
