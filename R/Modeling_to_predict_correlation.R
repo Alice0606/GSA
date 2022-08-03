@@ -1,15 +1,16 @@
-#'@title tidy and extract needed data from glm
-#'@description This function serves to clear up the total output of glm in a tidier form for further data analysis. Then, a row named "count" can be extracted out.
-#'@param mod The output dataframe of mode function
+#' @title tidy and extract needed data from glm
+#' @description This function serves to clear up the total output of glm in a tidier form for further data analysis. Then, a row named "count" can be extracted out.
+#' @param mod The output dataframe of mode function
+#' @importFrom rlang .data
 b_fun <- function(mod){
   broom::tidy(mod) %>%
-    dylyr::filter(term == "count")
+    dplyr::filter(.data$term == "count")
 }
 
 
-#'@title model for glm
-#'@description This function helps users to use the generalized linear models for predicting the correlation.
-
+#' @title model for glm
+#' @description This function helps users to use the generalized linear models for predicting the correlation.
+#' @param df The dataframe users want to use glm on.
 mod_fun <- function(df){
   stats::glm(disease~., data = df, family = "binomial")
 }
@@ -24,26 +25,26 @@ mod_fun <- function(df){
 #' @param covariates The covariates(e.g. age, gender)help testing the correlation.
 #'
 #' @return The return of this function is a table with p-value, conf.high and conf.high that give users direction on which geneset has greatest correlation to the disease.
-#'
+#' @importFrom rlang .data
 #' @examples
 Modeling_to_predict_correlation <- function(ped, disease, geneset, covariates){
-  data <- dpylr::select(ped, disease, geneset, covariates) %>%
+  data <- dplyr::select(ped, disease, geneset, covariates) %>%
     dplyr::as_tibble()
 
   df <- data %>%
     tidyr::pivot_longer(col = geneset, names_to = "category", values_to = "count") %>%
-    dplyr::group_by(category) %>%
+    dplyr::group_by(.data$category) %>%
     tidyr::nest()%>%
     dplyr::mutate(model = purrr::map(data, mod_fun)) %>%
-    dplyr::transmute(category,
-                     beta = purrr::map(model, b_fun)) %>%
+    dplyr::transmute(.data$category,
+                     beta = purrr::map(.data$model, b_fun)) %>%
     tidyr::unnest() %>%
-    dplyr::select(-term) %>%
+    dplyr::select(-.data$term) %>%
     dplyr::ungroup()
-  base::summary(glm.fit)
+  base::summary(.data$glm.fit)
 
-  output <- broom::tidy(glm.fit, conf.int = T)%>%
-    dplyr::mutate(or = exp(estimate), pv = p.value, conf.low = conf.low, conf.high = conf.high)
+  output <- broom::tidy(.data$glm.fit, conf.int = T)%>%
+    dplyr::mutate(or = exp(.data$estimate), pv = .data$p.value, conf.low = .data$conf.low, conf.high = .data$conf.high)
 
   print(output)
 }

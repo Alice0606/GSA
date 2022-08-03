@@ -5,7 +5,7 @@
 #' @param Name  the name of geneset you come up with.
 #'
 #' @return The return of the function is a table containing two columes named by "Sample ID" and user's input "Name". The "Name" colume dislpays the sum of genotypes of the genes offered by the user.
-#'
+#' @importFrom rlang .data
 #' @examples
 Count_variant <- function(Table, GeneSet, Name) {
 
@@ -14,9 +14,9 @@ Count_variant <- function(Table, GeneSet, Name) {
   }
 
   variant.per.gene_set.per.sample <- Table %>%
-    dplyr::filter(gene %in% GeneSet) %>%
+    dplyr::filter(.data$gene %in% GeneSet) %>%
     dplyr::summarise(dplyr::across(2:ncol(Table),base::sum)) %>%
     tidyr::pivot_longer(dplyr::everything(), names_to = "sampleID", values_to = Name)
 
-  return(count_variant)
+  return(variant.per.gene_set.per.sample)
 }

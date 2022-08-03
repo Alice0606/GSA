@@ -3,6 +3,7 @@
 #' This function is used to convert the genotype offered by the users to numeric form.
 #'
 #' @param string The input genotype given by the user.
+#' @importFrom rlang .data
 gt_to_num <- function(string) {
   sum(as.numeric(stringr::str_extract_all(string, "\\d")[[1]]))
 }
@@ -21,8 +22,8 @@ gt_to_num <- function(string) {
 #'
 #' @return the table returned has rows named by different genes and columes named by sample names. The genetype will be counted accoring to the different methods chosen by the user, all in the form of a number(e.g. 1 or 0)
 #' @examples
+#' @importFrom rlang .data
 count_mutations <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps", "Carrier")){
-
 
   table %>%
     dplyr::rowwise() %>%
@@ -30,7 +31,7 @@ count_mutations <- function(table, gene.col, gt.col, flag = c("Alleles", "Snps",
 
   table1 <- table %>%
     for(j in gt.col:ncol(table)){
-      set(table, i= which(dt[[j]]!=0), j=j, value =1)
+      set(table, i= which(.data$dt[[j]]!=0), j=j, value =1)
     }
 
   Allele <- table %>%
